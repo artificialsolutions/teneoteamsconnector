@@ -1,0 +1,52 @@
+# Eclipse
+*.pydevproject
+.project
+.metadata
+.gradle
+bin/
+tmp/
+target/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+
+#Netbeans
+nb-configuration.xml
+nbactions.xml
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# IntelliJ
+*.iml
+.idea/
+*.ipr
+*.iws
+
+# Visual Code
+.vscode/
+
+# Mac
+.DS_Store
+
+# Other
+*.log
+.sid
+desktop.ini
+jboss.xml
+.nb-gradle
+.nb-gradle-properties
+build
+*.wixobj
+*.msi
+*.wixpdb
