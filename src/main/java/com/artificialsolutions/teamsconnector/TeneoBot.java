@@ -18,13 +18,14 @@ import com.microsoft.bot.schema.Serialization;
 import com.microsoft.graph.models.User;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import org.slf4j.Logger;
@@ -293,37 +294,25 @@ public class TeneoBot extends ActivityHandler {
 
     private CompletableFuture<ResourceResponse> createResponse(final TurnContext turnContext,
             final TeneoResponse response) {
-        CompletableFuture<ResourceResponse> r = null;
+        var activities = new ArrayList<Activity>();
+
         var output = response.getOutput();
         if (output.getTextSegmentIndexes() != null) {
-            var texts = processTextSegmentIndexes(output.getText(), output.getTextSegmentIndexes());
-            if (texts != null) {
-                sendTextsToTeams(turnContext, texts);
-            }
+            activities.addAll(processTextSegmentIndexes(output.getText(), output.getTextSegmentIndexes()));
         } else {
-            r = sendTextToTeams(turnContext, output.getText());
+            activities.add(MessageFactory.text(output.getText()));
         }
         if (output.getAdaptiveCardContents() != null) {
-            r = sendAttachmentToTeams(turnContext, output.getAdaptiveCardContents());
+            var cardAttachment = createAdaptiveCardAttachment(output.getAdaptiveCardContents());
+            activities.add(MessageFactory.attachment(cardAttachment));
         }
-        return r;
+        turnContext.sendActivities(activities).thenApply(resourceResponses -> null);
+
+        return null;
     }
 
     private CompletableFuture<ResourceResponse> sendTextToTeams(final TurnContext turnContext, final String text) {
         return turnContext.sendActivity(MessageFactory.text(text));
-    }
-
-    private CompletableFuture<ResourceResponse> sendAttachmentToTeams(final TurnContext turnContext,
-            final String text) {
-        Attachment cardAttachment = createAdaptiveCardAttachment(text);
-        return turnContext.sendActivity(MessageFactory.attachment(cardAttachment));
-    }
-
-    private CompletableFuture<Void> sendTextsToTeams(final TurnContext turnContext, final Stream<String> texts) {
-        return turnContext.sendActivities(texts
-                .map(MessageFactory::text)
-                .collect(Collectors.toList()))
-                .thenApply(resourceResponses -> null);
     }
 
     private Attachment createAdaptiveCardAttachment(String adaptiveCardJson) {
@@ -340,17 +329,20 @@ public class TeneoBot extends ActivityHandler {
         }
     }
 
-    private Stream<String> processTextSegmentIndexes(String text, String textSegmentIndexesJson) {
+    private List<Activity> processTextSegmentIndexes(String text, String textSegmentIndexesJson) {
         try {
             var indexes = mapper.readTree(textSegmentIndexesJson);
             if (indexes.isArray()) {
                 Iterable<JsonNode> iterable = indexes::iterator;
-                return StreamSupport.stream(iterable.spliterator(), false).map(n -> parseIndexNode(n, text));
+                return StreamSupport.stream(iterable.spliterator(), false)
+                    .map(n -> parseIndexNode(n, text))
+                    .map(MessageFactory::text)
+                    .collect(Collectors.toList());
             }
         } catch (final Exception ex) {
             logger.error("Failure parsing outputTextSegmentIndexes {}, {}", textSegmentIndexesJson, ex);
         }
-        return null;
+        return Collections.emptyList();
     }
 
     private String parseIndexNode(JsonNode n, String s) {
