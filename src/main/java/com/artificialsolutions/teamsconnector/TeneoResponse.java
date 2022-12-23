@@ -5,26 +5,58 @@ import java.util.function.BiConsumer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 
+/**
+ * Specifies a Teneo engine response with its source data. 
+ */
 public class TeneoResponse {
 
+    /**
+     * The JSON source received from Teneo engine.
+     */
     private final JsonNode json;
 
+    /**
+     * The status of a Teneo engine response indicating if it is an error etc.
+     */
     private final TeneoResponseStatus status = new TeneoResponseStatus();
 
+    /**
+     * The content of a Teneo engine response (the text, adaptive cards etc).
+     */
     private TeneoResponseOutput output;
 
+    /**
+     * Constructs an instance of this class.
+     *
+     * @param json the JSON object to construct this object from. 
+     */
     public TeneoResponse(JsonNode json) {
         this.json = json;
     }
 
+    /**
+     * Gets the JSON source received from Teneo engine.
+     *
+     * @return The JSON source received from Teneo engine.
+     */
     public JsonNode getJson() {
         return json;
     }
 
+    /**
+     * Gets the status of a Teneo engine response indicating if it is an error etc.
+     *
+     * @return The status of a Teneo engine response indicating if it is an error etc.
+     */
     public TeneoResponseStatus getStatus() {
         return status;
     }
 
+    /**
+     * Gets the content of a Teneo engine response (the text, adaptive cards etc).
+     *
+     * @return The content of a Teneo engine response (the text, adaptive cards etc).
+     */
     public TeneoResponseOutput getOutput() {
         return output;
     }

@@ -73,6 +73,9 @@ public class Config implements Serializable {
      */
     private static final String PROP_APPLICATION_EXPLICIT_DATA = "${application.explicitData}";
 
+    /**
+     * <code>{@value}</code> - a comma-separated list of additional user-related Microsoft Graph parameters (CSV) to be sent to Teneo engine.
+     */
     private static final String PROP_MICROSOFT_GRAPH_REQUEST_PARAMS = "${microsoft.graph.request.params}";
 
     /**
@@ -131,7 +134,7 @@ public class Config implements Serializable {
     private Boolean explicitData;
 
     /**
-     * CSV value that is sent to microsoft graph request
+     * The CSV value indicating the user-related Microsoft Graph parameters to be sent to Teneo engine.
      */
     @Value(PROP_MICROSOFT_GRAPH_REQUEST_PARAMS)
     private String microsoftGraphRequestParams;
@@ -236,6 +239,13 @@ public class Config implements Serializable {
         return explicitData;
     }
 
+    /**
+     * Gets a comma-separated list of additional user-related Microsoft Graph parameters (CSV) to be sent to Teneo engine.
+     * 
+     * @return the CSV value indicating the user-related Microsoft Graph parameters to be sent to Teneo engine.
+     * 
+     * @see #PROP_MICROSOFT_GRAPH_REQUEST_PARAMS
+     */
     public String getMicrosoftGraphRequestParams() {
         return microsoftGraphRequestParams;
     }

@@ -46,6 +46,7 @@ public abstract class OneTimeTask implements Runnable {
         public void run() {
             synchronized (this) {
                 for (;;) {
+                	// The goal of this loop is to handle spurious wakeups 
                     if (state == STATE_CANCELLED) return;
                     final long remainingWaitMillis = waitMillis - (System.currentTimeMillis() - startMillis);
                     if (remainingWaitMillis <= 1) break;
@@ -148,7 +149,7 @@ public abstract class OneTimeTask implements Runnable {
      * 
      * @return {@code true} if this task neither has not nor will not be executed and {@code false}
      * otherwise, i.e., if the task either has been executed or is in the process of being executed and
-     * it is too take to cancel it. A task cannot be cancelled when it is "too late", i.e. when its
+     * it is too late to cancel it. A task cannot be cancelled when it is "too late", i.e. when its
      * current state is {@link #STATE_RUNNING} or {@link #STATE_EXECUTED}.
      */
     public boolean cancel() {

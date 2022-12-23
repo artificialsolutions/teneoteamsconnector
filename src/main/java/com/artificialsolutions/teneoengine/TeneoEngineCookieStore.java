@@ -371,7 +371,7 @@ public class TeneoEngineCookieStore implements Serializable, CookieStore {
     }
 
     /**
-     * Checks if the given domain and host match accoring to the logic implemented in the Netscape
+     * Checks if the given domain and host match according to the logic implemented in the Netscape
      * browser.
      * 
      * @param domain the domain.
