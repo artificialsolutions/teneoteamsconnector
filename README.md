@@ -1,92 +1,72 @@
-Authentification
-https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-authentication-types?view=azure-bot-service-4.0
-
-# asolteamsconnector
-
-This bot has been created using [Bot Framework](https://dev.botframework.com), it shows how to create a simple bot that accepts input from the user and echoes it back.
-
-This sample is a Spring Boot app and uses the Azure CLI and azure-webapp Maven plugin to deploy to Azure.
+# Teneo Microsoft Teams Connector
 
 ## Prerequisites
 
-- Java 11+
-- Install [Maven](https://maven.apache.org/)
-- An account on [Azure](https://azure.microsoft.com) if you want to deploy to Azure.
+These instructions assume your Teneo solution is published and that you know the Engine URL. To run the connector you need Java version 17 or higher. Further you will need a software make content on your `http://localhost:3978` accessible as a public URL. For testing purposes you can use [ngrok](https://ngrok.com).
 
-## To try this sample locally
-- From the root of this project folder:
-  - Build the sample using `mvn clean package`
-  - Run it by using `java -jar .\target\asolteamsconnector-1.0.0.jar`
+## The description of the software
 
-- Test the bot using Bot Framework Emulator
+The goal of this Teneo Microsoft Teams Connector is to connect Microsoft Teams to a Teneo-built Virtual Assistant (VA) so the Teams messenger acts as a frontend to the Teneo engine (the VA backend). In this way, users can chat via Teams with a Teneo engine instead of with a real person. One instance of this connector can serve multiple users talking to one published Teneo engine simultaneously.
 
-  [Bot Framework Emulator](https://github.com/microsoft/botframework-emulator) is a desktop application that allows bot developers to test and debug their bots on localhost or running remotely through a tunnel.
+Teneo Microsoft Teams Connector is a Java console application. It requires JVM version 17 or higher. No firewalls etc should prevent its communication with Microsoft Bot API.
 
-  - Install the Bot Framework Emulator version 4.3.0 or greater from [here](https://github.com/Microsoft/BotFramework-Emulator/releases)
+The functioning of the connector is illustrated in the following functional diagram:
 
-  - Connect to the bot using Bot Framework Emulator
+![Functional diagram](README-imgs/FunctionalDiagram.png)
 
-    - Launch Bot Framework Emulator
-    - File -> Open Bot
-    - Enter a Bot URL of `http://localhost:3978/api/messages`
+The sequence of the steps depicted in the diagram is as follows:
 
-## Deploy the bot to Azure
+1. User submits his/her message into Teams messenger.
 
-As described on [Deploy your bot](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-deploy-az-cli), you will perform the first 4 steps to setup the Azure app, then deploy the code using the azure-webapp Maven plugin.
+2. User's input is submitted to the connector by the Microsoft teams backend. The connector creates a `TurnContext` object (an instance of `com.microsoft.bot.builder.TurnContext`) for the given user interaction and generates a so-called bridge session ID (BSID) consisting the account's object ID within Azure Active Directory (AAD) and the channel id for the user or bot on this channel. The connector checks then via its singleton bridge object (an instance of `com.artificialsolutions.teamsconnector.TeneoBot`) if there already exists a session (an instance of `com.artificialsolutions.teamsconnector.TeneoBot.BridgeSession`) identified via this BSID. If no such session exists, it is created and its timeout countdown is started. If it already exists, it is returned and its timeout countdown is restarted. Each session object has its own instance of Teneo engine client (`com.artificialsolutions.teneoengine.TeneoEngineClient`) to talk to Teneo engine.
 
-### 1. Login to Azure
-From a command (or PowerShell) prompt in the root of the bot folder, execute:  
-`az login`
+3. The connector submits the user input to the Teneo engine client.
 
-### 2. Set the subscription
-`az account set --subscription "<azure-subscription>"`
+4. The Teneo engine client forwards the user's message to the Teneo engine with a POST request.
 
-If you aren't sure which subscription to use for deploying the bot, you can view the list of subscriptions for your account by using `az account list` command.
+5. The Teneo engine client receives Virtual Assistant's answer in the response.
 
-### 3. Create an App registration
-`az ad app create --display-name "<botname>" --password "<appsecret>" --available-to-other-tenants`
+6. Virtual Assistant's answer is passed to the `TurnContext` object obtained at step 2.
 
-Replace `<botname>` and `<appsecret>` with your own values.
+7. The `TurnContext` object submits the answer to the Microsoft Bot API.
 
-`<botname>` is the unique name of your bot.  
-`<appsecret>` is a minimum 16 character password for your bot.
+8. The answer is displayed to the user.
 
-Record the `appid` from the returned JSON
+## Configuring the connector
 
-### 4. Create the Azure resources
-Replace the values for `<appid>`, `<appsecret>`, `<botname>`, and `<groupname>` in the following commands:
+The application is configured in the `application.properties` file (to be found in `src\main\resources` in the source code). The following configuration properties are implemented.
 
-#### To a new Resource Group
-`az deployment sub create --name "echoBotDeploy" --location "westus" --template-file ".\deploymentTemplates\template-with-new-rg.json" --parameters appId="<appid>" appSecret="<appsecret>" botId="<botname>" botSku=S1 newAppServicePlanName="echoBotPlan" newWebAppName="echoBot" groupLocation="westus" newAppServicePlanLocation="westus"`
+* `server.port` - the port the connector is available on localhost (for example, 3978)
+* `MicrosoftAppType`, `MicrosoftAppId`, `MicrosoftAppPassword`, `MicrosoftTenantId` - see [here](https://learn.microsoft.com/en-us/azure/bot-service/bot-service-manage-overview)
+* `microsoft.graph.request.params` - the user-related request parameters to be added to Teneo engine requests: `UserPrincipalName`, `GivenName`, `Surname`, `Mail`, `Department`, `EmployeeId`, `AgeGroup`, `City`, `CompanyName`, `ConsentProvidedForMinor`, `Country`, `DisplayName`, `EmployeeType`, `ExternalUserState`, `FaxNumber`, `JobTitle`, `LegalAgeGroupClassification`, `MailNickname`, `MobilePhone`, `OfficeLocation`, `PostalCode`, `PreferredLanguage`, `State`, `StreetAddress`, `UserType`, `UsageLocation`, `MySite`, `AboutMe`, `PreferredName` as per [https://learn.microsoft.com/en-us/powershell/module/microsoft.graph.users/update-mguser](https://learn.microsoft.com/en-us/powershell/module/microsoft.graph.users/update-mguser)
+* `teneo.engine.endpointUrl` - the Teneo engine endpoint (the URL of the virtual assistant backend)
+* `teneo.engine.connectTimeoutMillis` - the timeout to connect with Teneo engine, in milliseconds
+* `teneo.engine.responseTimeoutMillis` - the timeout to wait for Teneo engine responses, in milliseconds
+* `bridge.sessionTimeoutMillis` - the timeout for the sessions created by the bridge, in milliseconds; it is recommendable to have it slightly longer then the session timeout of Teneo engine, which is normally 10 minutes (600 seconds, 600000 milliseconds)
+* `bridge.maxParallelSessions` - the maximum number of simultaneous sessions for the bridge; this number can be kept high (tens of thousands), although not too high since its purpose is to reduce the risk or the application running out of memory if the number of session increases too much
+* `application.explicitData` - the Boolean value indicating if some error and debug information should be added to requests sent both to Teneo engine and displayed to users in Teams. This property is not obligatory and defaults to `false`. It should only be set to `true` for testing and troubleshooting
 
-#### To an existing Resource Group
-`az deployment group create --resource-group "<groupname>" --template-file ".\deploymentTemplates\template-with-preexisting-rg.json" --parameters appId="<appid>" appSecret="<appsecret>" botId="<botname>" newWebAppName="echoBot" newAppServicePlanName="echoBotPlan" appServicePlanLocation="westus" --name "echoBot"`
+An example configuration file `asolfbconnector.properties` is supplied with this app.
 
-### 5. Update app id and password
-In src/main/resources/application.properties update
-- `microsoftAppPassword` with the botsecret value
-- `microsoftAppId` with the appid from the first step
+Regarding the logger configuration (file `log4j2.json` in `src\main\resources` in the source code), in order to test the application it is highly recommended to have it on the `debug` or `trace` level. If you have it on those sensitivity levels, it might log some PII, like user BSIDs, user inputs etc. Thus it should be set to have less sensitivity in production (`info` or `warn` for example).
 
--  C:\apache-maven-3.8.5\bin\mvn clean package -DskipTests
--- C:\apache-maven-3.8.5\bin\mvn azure-webapp:deploy -Dgroupname="eur-infra-chatbot-teneo-rg" -Dbotname="TeneoGraph"
+## Setting up a bot in Azure
+
+Access [https://portal.azure.com](https://portal.azure.com) and create a bot there. Go to the bot's configuration and add the connectors' public URL in the field **Messaging endpoint** in the format `https://YOUR-PUBLIC-DOMAIN/api/messages` where `YOUR-PUBLIC-DOMAIN` is the public domain your connector is running on.
 
 
-### 6. Deploy the code
-- Execute `mvn clean package`
-- Execute `mvn azure-webapp:deploy -Dgroupname="<groupname>" -Dbotname="<botname>"`
+### Teneo Solution configuration
 
-If the deployment is successful, you will be able to test it via "Test in Web Chat" from the Azure Portal using the "Bot Channel Registration" for the bot.
+_Data received by Teneo engine from Connector_
 
-After the bot is deployed, you only need to execute #6 if you make changes to the bot.
+The requests received by Teneo engine contain the following parameters:
 
+* `viewtype`, value: `tieapi`
+* `channel`, value: `Teams`
+* `userinput`, value: the input text if the user submitted it
 
-## Further reading
+Additionally the request will contain all the parameters/values available via the `com.microsoft.bot.schema.Activity.getValue()` provided this call returned a `Map` instance. Moreover, the user-related parameters configured in `microsoft.graph.request.params` will also be added.
 
-- [Maven Plugin for Azure App Service](https://docs.microsoft.com/en-us/java/api/overview/azure/maven/azure-webapp-maven-plugin/readme?view=azure-java-stable)
-- [Spring Boot](https://spring.io/projects/spring-boot)
-- [Azure for Java cloud developers](https://docs.microsoft.com/en-us/azure/java/?view=azure-java-stable)
-- [Bot Framework Documentation](https://docs.botframework.com)
-- [Bot Basics](https://docs.microsoft.com/azure/bot-service/bot-builder-basics?view=azure-bot-service-4.0)
-- [Activity processing](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-activity-processing?view=azure-bot-service-4.0)
-- [Azure Bot Service Introduction](https://docs.microsoft.com/azure/bot-service/bot-service-overview-introduction?view=azure-bot-service-4.0)
-- [Azure Bot Service Documentation](https://docs.microsoft.com/azure/bot-service/?view=azure-bot-service-4.0)
+_Data returned by Teneo engine (Teneo solution) to Connector_
+
+Teneo engine normally returns a text as its answer. This text is then displayed in Teams to the user. If [adaptive cards]((https://learn.microsoft.com/en-us/microsoftteams/platform/task-modules-and-cards/cards/cards-reference#adaptive-card)) should be returned, they should be placed in the output parameter `msbotframework` as a well formed JSON. (Splitting answers into 'bubbles')[https://www.teneo.ai/resource/channels/teneo-web-chat#message-types_splitting-answers-into-bubbles] is also supported via the output parameter `outputTextSegmentIndexes`.

@@ -5,7 +5,6 @@ import java.util.Properties;
 import com.microsoft.bot.integration.Configuration;
 
 public class EnvironmentPropertiesConfiguration implements Configuration {
-    
 
     /**
      * Holds the properties
@@ -24,6 +23,7 @@ public class EnvironmentPropertiesConfiguration implements Configuration {
      * Returns a value for the specified property name.
      *
      * @param key The property name.
+     * 
      * @return The property value.
      */
     @Override
@@ -41,7 +41,9 @@ public class EnvironmentPropertiesConfiguration implements Configuration {
 
     /**
      * Returns an array of values from an entry that is comma delimited.
+     * 
      * @param key The property name.
+     * 
      * @return The property values as a String array.
      */
     @Override

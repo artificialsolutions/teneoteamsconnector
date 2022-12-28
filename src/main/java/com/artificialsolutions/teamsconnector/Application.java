@@ -31,24 +31,42 @@ import org.slf4j.LoggerFactory;
 @Import({ BotController.class })
 
 /**
- * This class extends the BotDependencyConfiguration which provides the default implementations for
- * a Bot application. The Application class should override methods in order to provide custom
- * implementations.
+ * This class extends the BotDependencyConfiguration which provides the default implementations for a Bot application.
+ * The Application class should override methods in order to provide custom implementations.
  */
 public class Application extends BotDependencyConfiguration {
 
-    final Logger logger = LoggerFactory.getLogger(Application.class);
+    /**
+     * The logger.
+     */
+    private final Logger logger = LoggerFactory.getLogger(Application.class);
 
+    /**
+     * The application configuration object.
+     */
     @Autowired
     private Config config;
-    
+
+    /**
+     * A JSON object mapper.
+     */
     @Autowired
     ObjectMapper mapper;
 
+    /**
+     * The <i>main</i> function to run the application from the console.
+     * 
+     * @param args the string arguments.
+     */
     public static void main(final String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
+    /**
+     * Returns a Microsoft {@code Configuration} object build on the application configuration.
+     * 
+     * @return the Microsoft {@code Configuration} object.
+     */
     @Bean
     @Override
     public Configuration getConfiguration() {
@@ -56,8 +74,8 @@ public class Application extends BotDependencyConfiguration {
     }
 
     /**
-     * Returns the Bot for this application. The @Component annotation could be used on the Bot class
-     * instead of this method with the @Bean annotation.
+     * Returns the Bot for this application. The @Component annotation could be used on the Bot class instead of this
+     * method with the @Bean annotation.
      *
      * @return The Bot implementation for this application.
      */
@@ -74,7 +92,6 @@ public class Application extends BotDependencyConfiguration {
             logger.info("maxParallelSessions [{}]", config.getMaxParallelSessions());
             logger.info("isExplicitData [{}]", config.isExplicitData());
         }
-
         return new TeneoBot(config, mapper);
     }
 

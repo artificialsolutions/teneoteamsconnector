@@ -61,6 +61,9 @@ public class TeneoResponse {
         return output;
     }
 
+    /**
+     * Response parser. A class with static methods to parse Teneo engine responses.
+     */
     public static class Parser {
 
         public static TeneoResponse parse(final JsonNode json) {
