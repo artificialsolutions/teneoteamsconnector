@@ -1,0 +1,69 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "BotNameEndpoint": {
+      "type": "SecureString",
+      "metadata": {
+        "description": "Bot endpoint"
+      },
+      "maxLength": 50,
+      "minLength": 5
+    },
+        "botServices_Bot_name": {
+            "defaultValue": "BotName",
+            "type": "String",
+            "description": "Bot Name"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.BotService/botServices",
+            "apiVersion": "2022-06-15-preview",
+            "name": "[parameters('botServices_Bot_name')]",
+            "location": "global",
+            "sku": {
+                "name": "S1"
+            },
+            "kind": "azurebot",
+            "properties": {
+                "displayName": "[parameters('botServices_Bot_name')]",
+                "iconUrl": "https://docs.botframework.com/static/devportal/client/images/bot-framework-default.png",
+                "msaAppId": "5c594ed2-183b-409c-a7ff-ec50cc0156b7",
+                "msaAppType": "MultiTenant",
+                "luisAppIds": [],
+                "isStreamingSupported": false,
+                "schemaTransformationVersion": "1.3",
+                "tenantId": "4e87902a-fae9-422b-8458-6fdb9e868ef0",
+                "isCmekEnabled": false,
+                "disableLocalAuth": false,
+                "endpoint": "[parameters('botServices_Bot_name ')]"
+            }
+        },
+        {
+            "type": "Microsoft.BotService/botServices/channels",
+            "apiVersion": "2022-06-15-preview",
+            "name": "[concat(parameters('botServices_Bot_name'), '/WebChatChannel')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.BotService/botServices', parameters('botServices_Bot_name'))]"
+            ],
+            "properties": {
+                "properties": {
+                    "sites": [
+                        {
+                            "siteName": "Default Site",
+                            "isEnabled": true,
+                            "isWebchatPreviewEnabled": true,
+                            "isBlockUserUploadEnabled": false
+                        }
+                    ]
+                },
+                "etag": "W/\"53d44b4f732a0e62d5adb9f6013abcae12/29/2022 10:19:38 AM\"",
+                "channelName": "WebChatChannel",
+                "location": "global"
+            }
+        }
+    ]
+}

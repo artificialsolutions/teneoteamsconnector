@@ -1,12 +1,19 @@
 # Teneo Microsoft Teams Connector
 
+This Java Connector connects Microsoft Teams to a Teneo-built Virtual Assistant (VA) so the Teams messenger acts as a frontend to the Teneo engine (the VA backend). In this way, users can chat via Teams with a Teneo engine instead of with a real person. One instance of this connector can serve multiple users talking to one published Teneo engine simultaneously.
 ## Prerequisites
 
-These instructions assume your Teneo solution is published and that you know the Engine URL. To run the connector you need Java version 17 or higher. Further you will need a software make content on your `http://localhost:3978` accessible as a public URL. For testing purposes you can use [ngrok](https://ngrok.com).
+### Teneo Engine
+
+Your bot needs to be published and you need to know the Engine URL.
+
+### Java 
+
+To run the connector you need Java version 17 or higher. 
+
+To run the connector locally, [ngrok](https://ngrok.com/) is preferred to make the connector available via HTTPS on port 3978.
 
 ## The description of the software
-
-The goal of this Teneo Microsoft Teams Connector is to connect Microsoft Teams to a Teneo-built Virtual Assistant (VA) so the Teams messenger acts as a frontend to the Teneo engine (the VA backend). In this way, users can chat via Teams with a Teneo engine instead of with a real person. One instance of this connector can serve multiple users talking to one published Teneo engine simultaneously.
 
 Teneo Microsoft Teams Connector is a Java console application. It requires JVM version 17 or higher. No firewalls etc should prevent its communication with Microsoft Bot API.
 
@@ -32,6 +39,14 @@ The sequence of the steps depicted in the diagram is as follows:
 
 8. The answer is displayed to the user.
 
+## Setting up a bot in Azure
+An Azure account with an active subscription is required. [Create an account for free](https://azure.microsoft.com/free/?utm_source=campaign&utm_campaign=vscode-tutorial-app-service-extension&mktingSource=vscode-tutorial-app-service-extension).
+
+  [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fartificialsolutions%2Fteneoteamsconnector%2FXTAI-753%2Ftemplate.json)
+
+
+Access [https://portal.azure.com](https://portal.azure.com) and create a bot there. Go to the bot's configuration and add the connectors' public URL in the field **Messaging endpoint** in the format `https://YOUR-PUBLIC-DOMAIN/api/messages` where `YOUR-PUBLIC-DOMAIN` is the public domain your connector is running on.
+
 ## Configuring the connector
 
 The application is configured in the `application.properties` file (to be found in `src\main\resources` in the source code). The following configuration properties are implemented.
@@ -50,9 +65,7 @@ An example configuration file `asolfbconnector.properties` is supplied with this
 
 Regarding the logger configuration (file `log4j2.json` in `src\main\resources` in the source code), in order to test the application it is highly recommended to have it on the `debug` or `trace` level. If you have it on those sensitivity levels, it might log some PII, like user BSIDs, user inputs etc. Thus it should be set to have less sensitivity in production (`info` or `warn` for example).
 
-## Setting up a bot in Azure
 
-Access [https://portal.azure.com](https://portal.azure.com) and create a bot there. Go to the bot's configuration and add the connectors' public URL in the field **Messaging endpoint** in the format `https://YOUR-PUBLIC-DOMAIN/api/messages` where `YOUR-PUBLIC-DOMAIN` is the public domain your connector is running on.
 
 
 ### Teneo Solution configuration
