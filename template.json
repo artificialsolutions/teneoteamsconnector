@@ -2,18 +2,12 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-      "BotNameEndpoint": {
-      "type": "SecureString",
-      "metadata": {
-        "description": "Bot endpoint"
-      },
-      "maxLength": 50,
-      "minLength": 5
-    },
-        "botServices_Bot_name": {
-            "defaultValue": "BotName",
-            "type": "String",
-            "description": "Bot Name"
+        "botServices_DaperZuluBot_endpoint": {
+            "type": "SecureString"
+        },
+        "botServices_DaperZuluBot_name": {
+            "defaultValue": "DaperZuluBot",
+            "type": "String"
         }
     },
     "variables": {},
@@ -21,14 +15,14 @@
         {
             "type": "Microsoft.BotService/botServices",
             "apiVersion": "2022-06-15-preview",
-            "name": "[parameters('botServices_Bot_name')]",
+            "name": "[parameters('botServices_DaperZuluBot_name')]",
             "location": "global",
             "sku": {
                 "name": "S1"
             },
             "kind": "azurebot",
             "properties": {
-                "displayName": "[parameters('botServices_Bot_name')]",
+                "displayName": "[parameters('botServices_DaperZuluBot_name')]",
                 "iconUrl": "https://docs.botframework.com/static/devportal/client/images/bot-framework-default.png",
                 "msaAppId": "5c594ed2-183b-409c-a7ff-ec50cc0156b7",
                 "msaAppType": "MultiTenant",
@@ -38,16 +32,16 @@
                 "tenantId": "4e87902a-fae9-422b-8458-6fdb9e868ef0",
                 "isCmekEnabled": false,
                 "disableLocalAuth": false,
-                "endpoint": "[parameters('botServices_Bot_name ')]"
+                "endpoint": "[parameters('botServices_DaperZuluBot_endpoint')]"
             }
         },
         {
             "type": "Microsoft.BotService/botServices/channels",
             "apiVersion": "2022-06-15-preview",
-            "name": "[concat(parameters('botServices_Bot_name'), '/WebChatChannel')]",
+            "name": "[concat(parameters('botServices_DaperZuluBot_name'), '/WebChatChannel')]",
             "location": "global",
             "dependsOn": [
-                "[resourceId('Microsoft.BotService/botServices', parameters('botServices_Bot_name'))]"
+                "[resourceId('Microsoft.BotService/botServices', parameters('botServices_DaperZuluBot_name'))]"
             ],
             "properties": {
                 "properties": {
