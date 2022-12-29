@@ -42,9 +42,6 @@ The sequence of the steps depicted in the diagram is as follows:
 ## Setting up a bot in Azure
 An Azure account with an active subscription is required. [Create an account for free](https://azure.microsoft.com/free/?utm_source=campaign&utm_campaign=vscode-tutorial-app-service-extension&mktingSource=vscode-tutorial-app-service-extension).
 
-  [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fartificialsolutions%2Fteneoteamsconnector%2FXTAI-753%2Ftemplate.json)
-
-
 Access [https://portal.azure.com](https://portal.azure.com) and create a bot there. Go to the bot's configuration and add the connectors' public URL in the field **Messaging endpoint** in the format `https://YOUR-PUBLIC-DOMAIN/api/messages` where `YOUR-PUBLIC-DOMAIN` is the public domain your connector is running on.
 
 ## Configuring the connector
@@ -61,7 +58,6 @@ The application is configured in the `application.properties` file (to be found 
 * `bridge.maxParallelSessions` - the maximum number of simultaneous sessions for the bridge; this number can be kept high (tens of thousands), although not too high since its purpose is to reduce the risk or the application running out of memory if the number of session increases too much
 * `application.explicitData` - the Boolean value indicating if some error and debug information should be added to requests sent both to Teneo engine and displayed to users in Teams. This property is not obligatory and defaults to `false`. It should only be set to `true` for testing and troubleshooting
 
-An example configuration file `asolfbconnector.properties` is supplied with this app.
 
 Regarding the logger configuration (file `log4j2.json` in `src\main\resources` in the source code), in order to test the application it is highly recommended to have it on the `debug` or `trace` level. If you have it on those sensitivity levels, it might log some PII, like user BSIDs, user inputs etc. Thus it should be set to have less sensitivity in production (`info` or `warn` for example).
 
