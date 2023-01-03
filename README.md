@@ -34,17 +34,19 @@ The sequence of the steps depicted in the diagram is as follows:
 
 Your bot needs to be published and you need to know the Engine URL.
 
-### Java 
+### Java
 
 To run the connector you need Java version 17 or higher. [Download here](https://www.oracle.com/java/technologies/downloads/#java17)
 
 To run the connector locally, [ngrok](https://ngrok.com/) is preferred to make the connector available via HTTPS on port 3978.
 Clone this repository:
+
 ``` bash
 git clone https://github.com/artificialsolutions/teneoteamsconnector.git
 ```
-    
+
 ## Setting up a bot in Azure
+
 An Azure account with an active subscription is required. [Create an account for free](https://azure.microsoft.com/free/?utm_source=campaign&utm_campaign=vscode-tutorial-app-service-extension&mktingSource=vscode-tutorial-app-service-extension).
 
 Access [https://portal.azure.com](https://portal.azure.com) and follow the instructions under "Create the resource" from steps 1-10 [here](https://learn.microsoft.com/en-us/azure/bot-service/abs-quickstart?view=azure-bot-service-4.0&tabs=multitenant#create-the-resource) to create a bot.
@@ -53,7 +55,8 @@ Once Created, go to the bot's configuration and add the connectors public URL in
 
 ## Configuring the connector
 
-The application is configured in the `application.properties` file (to be found in `src\main\resources` in the source code). The following configuration properties are implemented. 
+The application is configured in the `application.properties` file (to be found in `src\main\resources` in the source code). The following configuration properties are implemented.
+
 * `server.port` - the port the connector is available on localhost (for example, 3978)
 * `MicrosoftAppType` By default "multitenant" for Java client.
 * `MicrosoftAppId` can be found under the bot configuration as  'Microsoft App ID'
@@ -70,7 +73,9 @@ The application is configured in the `application.properties` file (to be found 
 Regarding the logger configuration (file `log4j2.json` in `src\main\resources` in the source code), in order to test the application it is highly recommended to have it on the `debug` or `trace` level. If you have it on those sensitivity levels, it might log some PII, like user BSIDs, user inputs etc. Thus it should be set to have less sensitivity in production (`info` or `warn` for example).
 
 ### Channels
+
 A channel is a how your bot communicates with your application, in this case Microsoft Teams.
+
 * Select your bot in Azure, under settings click on Channels then click on "Available Channels" and select Microsoft Teams.
 * Read and Accept the Channel Publication Terms.
 * Select "Microsoft Teams Commercial (most common)"
@@ -80,6 +85,7 @@ A channel is a how your bot communicates with your application, in this case Mic
 To open in Teams hit the link under actions "Open in Teams", you will be prompted to allowed to open Teams, once you agree you will see your robot in your Teams Chat panel.
 
 ### Teneo Solution configuration
+
 _Data received by Teneo engine from Connector_
 
 The requests received by Teneo engine contain the following parameters:
@@ -92,9 +98,20 @@ Additionally the request will contain all the parameters/values available via th
 
 _Data returned by Teneo engine (Teneo solution) to Connector_
 
-Teneo engine normally returns a text as its answer. This text is then displayed in Teams to the user. If [adaptive cards]((https://learn.microsoft.com/en-us/microsoftteams/platform/task-modules-and-cards/cards/cards-reference#adaptive-card)) should be returned, they should be placed in the output parameter `msbotframework` as a well formed JSON. (Splitting answers into 'bubbles')[https://www.teneo.ai/resource/channels/teneo-web-chat#message-types_splitting-answers-into-bubbles] is also supported via the output parameter `outputTextSegmentIndexes`.
+Teneo engine normally returns a text as its answer. This text is then displayed in Teams to the user. If [adaptive cards]((https://learn.microsoft.com/en-us/microsoftteams/platform/task-modules-and-cards/cards/cards-reference#adaptive-card)) should be returned, they should be placed in the output parameter `msbotframework` as a well formed JSON. [Splitting answers into 'bubbles'](https://www.teneo.ai/resource/channels/teneo-web-chat#message-types_splitting-answers-into-bubbles) is also supported via the output parameter `outputTextSegmentIndexes`.
 
-### Try your Bot.
+### Try your Bot
+
+* Compile this connector
+
+``` bash
+javac ./src/main/java/com/artificialsolutions/teamsconnector/Application.java
+```
+
 * Run this connector
+
+``` bash
+java ./src/main/java/com/artificialsolutions/teamsconnector/Application.java
+```
 
 * Send a message trough Microsoft Teams and your bot will respond to your chat!
