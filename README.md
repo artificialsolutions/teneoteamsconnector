@@ -1,8 +1,8 @@
 # Teneo Microsoft Teams Connector
 
-This Java Connector connects Microsoft Teams to a Teneo-built Virtual Assistant (VA) so the Teams messenger acts as a frontend to the Teneo engine (the VA backend). In this way, users can chat via Teams with a Teneo engine instead of with a real person. One instance of this connector can serve multiple users talking to one published Teneo engine simultaneously.
+This Java Connector connects Microsoft Teams to a Teneo-built Virtual Assistant (VA) so the Teams messenger acts as a frontend to the Teneo engine (the VA backend). This way, users can chat via Teams with a Teneo engine instead of a real person. One instance of this connector can serve multiple users talking to one published Teneo engine simultaneously.
 
-## The description of the software
+## Description of the software
 
 Teneo Microsoft Teams Connector is a Java console application. No firewalls, etc., should prevent its communication with Microsoft Bot API.
 
@@ -84,7 +84,7 @@ A channel is how your bot communicates with your application, in this case Micro
 * Click "Apply".
 * Once enabled, you can close this tab and the channel should be available under Channels along with Web Chat.
 
-To open in Teams, hit the link under Actions, "Open in Teams". You will be prompted to allow Teams to be opened. Once you agree, you will see your robot in your Teams Chat panel.
+To open in Teams, hit the link under Actions, "Open in Teams". You will be prompted to allow Teams to be opened. Once you agree, you will see your bot in your Teams Chat panel.
 
 ### Teneo Solution configuration
 
@@ -102,7 +102,7 @@ Additionally, the request will contain all the parameters/values available via t
 
 Teneo engine normally returns a text as its answer. This text is then displayed in Teams to the user. If [adaptive cards]((https://learn.microsoft.com/en-us/microsoftteams/platform/task-modules-and-cards/cards/cards-reference#adaptive-card)) should be returned, they should be placed in the output parameter `msbotframework` as a well formed JSON. [Splitting answers into 'bubbles'](https://www.teneo.ai/resource/channels/teneo-web-chat#message-types_splitting-answers-into-bubbles) is also supported via the output parameter `outputTextSegmentIndexes`.
 
-### Try your Bot
+### Try out your Bot
 
 * Compile this connector:
 
