@@ -26,6 +26,8 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		-->
 		<java.version>17</java.version>
+		<maven.compiler.target>17</maven.compiler.target>
+		<maven.compiler.source>17</maven.compiler.source>
 		<log4j>2.17.2</log4j>
 		<start-class>com.artificialsolutions.teamsconnector.Application</start-class>
 		<repo.url>https://botbuilder.myget.org/F/botbuilder-v4-java-daily/maven/</repo.url>
@@ -157,7 +159,7 @@
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
-					<release>11</release>
+					<release>${java.version}</release>
 				</configuration>
 			</plugin>
 
@@ -203,8 +205,8 @@
 					</appSettings>
 					<runtime>
 						<os>linux</os>
-						<javaVersion>java11</javaVersion>
-						<webContainer>java11</webContainer>
+						<javaVersion>java17</javaVersion>
+						<webContainer>java17</webContainer>
 					</runtime>
 					<deployment>
 						<resources>
