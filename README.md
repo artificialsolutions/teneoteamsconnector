@@ -62,8 +62,8 @@ The application is configured in the `application.properties` file (to be found 
 | `server.port`                        | The port the connector is available on localhost (for example, 3978) |
 | `MicrosoftAppType`                   | By default "multitenant" for Java client                     |
 | `MicrosoftAppId`                     | Can be found under the bot configuration as  'Microsoft App ID' |
-| `MicrosoftAppPassword`               | Can be found under 'Certificates & Secrets' section. It's the value of the new client secret you generate |
-| `MicrosoftTenantId`                  | Not applicable. Leave this blank for a multi-tenant bot      |
+| `MicrosoftAppPassword`               | Can be found under 'Certificates & Secrets' section. It's the value of the new client secret you generate (not the Secret ID) |
+| `MicrosoftTenantId`                  | Can be found under 'Azure Active Directory' on your Azure Portal.|
 | `microsoft.graph.request.params`     | The user-related request parameters to be added to Teneo engine requests: `UserPrincipalName`, `GivenName`, `Surname`, `Mail`, `Department`, `EmployeeId`, `AgeGroup`, `City`, `CompanyName`, `ConsentProvidedForMinor`, `Country`, `DisplayName`, `EmployeeType`, `ExternalUserState`, `FaxNumber`, `JobTitle`, `LegalAgeGroupClassification`, `MailNickname`, `MobilePhone`, `OfficeLocation`, `PostalCode`, `PreferredLanguage`, `State`, `StreetAddress`, `UserType`, `UsageLocation`, `MySite`, `AboutMe`, `PreferredName` as per [https://learn.microsoft.com/en-us/powershell/module/microsoft.graph.users/update-mguser](https://learn.microsoft.com/en-us/powershell/module/microsoft.graph.users/update-mguser) |
 | `teneo.engine.endpointUrl`           | The Teneo engine url for your bot                            |
 | `teneo.engine.connectTimeoutMillis`  | The timeout to connect with Teneo engine, in milliseconds    |
