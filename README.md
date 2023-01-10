@@ -99,7 +99,7 @@ Additionally, the request will contain all the parameters/values available via t
 
 ### Data returned by Teneo engine (Teneo solution) to Connector
 
-ViIrtual Assistant normally returns a text as its answer. This text is then displayed in Teams to the user. If [adaptive cards](https://learn.microsoft.com/en-us/microsoftteams/platform/task-modules-and-cards/cards/cards-reference#adaptive-card) should be returned, they should be placed in the output parameter `msbotframework` as a well formed JSON. [Splitting answers into 'bubbles'](https://www.teneo.ai/resource/channels/teneo-web-chat#message-types_splitting-answers-into-bubbles) is also supported via the output parameter `outputTextSegmentIndexes`.
+Virtual Assistant normally returns a text as its answer. This text is then displayed in Teams to the user. If [adaptive cards](https://learn.microsoft.com/en-us/microsoftteams/platform/task-modules-and-cards/cards/cards-reference#adaptive-card) should be returned, they should be placed in the output parameter `msbotframework` as a well formed JSON. [Splitting answers into 'bubbles'](https://www.teneo.ai/resource/channels/teneo-web-chat#message-types_splitting-answers-into-bubbles) is also supported via the output parameter `outputTextSegmentIndexes`.
 
 ## Setting up a bot in Azure
 
@@ -107,7 +107,7 @@ An Azure account with an active subscription is required. [Create an account for
 
 Access [https://portal.azure.com](https://portal.azure.com) and follow the instructions under "Create the resource" from steps 1-10 [here](https://learn.microsoft.com/en-us/azure/bot-service/abs-quickstart?view=azure-bot-service-4.0&tabs=multitenant#create-the-resource) to create a bot.
 
-Once created, go to the bot's configuration and add the connector's public URL in the field **Messaging endpoint** in the format `https://YOUR-PUBLIC-DOMAIN/api/messages` where `https://YOUR-PUBLIC-DOMAIN/` is the public URL of your connector (the one provided by `ngrok` or similar).
+Once created, go to the bot's configuration and add the connector's public URL in the field __Messaging endpoint__ in the format `https://YOUR-PUBLIC-DOMAIN/api/messages` where `https://YOUR-PUBLIC-DOMAIN/` is the public URL of your connector (the one provided by `ngrok` or similar).
 
 _Channels_
 
