@@ -76,7 +76,7 @@ mvn clean compile package
 __Run the connector in your console__
 
 ```bash
-java -jar ./target/asolteamsconnector-1.0.0.jar
+java -jar asolteamsconnector-1.0.0.jar
 ```
 
 It sets up a service available via HTTP on your local host on the port specified in the application's configuration file. Its URL address might look something like `http://localhost:3978` or similar. Microsoft Azure should be able to access that service via HTTPS so you have to make it publicly accessible. For demo or testing purposes you can use [ngrok](https://ngrok.com/) to create a public URL for a service running on your local host.

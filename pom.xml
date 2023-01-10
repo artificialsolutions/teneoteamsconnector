@@ -23,7 +23,7 @@
 		<java.version>17</java.version>
 		<maven.compiler.target>17</maven.compiler.target>
 		<maven.compiler.source>17</maven.compiler.source>
-		<log4j>2.19.0</log4j>
+		<log4j>2.17.2</log4j>
 		<start-class>com.artificialsolutions.teamsconnector.Application</start-class>
 		<repo.url>https://botbuilder.myget.org/F/botbuilder-v4-java-daily/maven/</repo.url>
 
