@@ -147,7 +147,7 @@ public class TeneoEngineClient implements Serializable {
 
     /**
      * Reads and assigns the values to use in the subsequent request for the
-     * <a href="https://developers.artificial-solutions.com/engine/api#session-management">session
+     * <a href="https://developers.teneo.ai/article/deploy/engine-api#session-management">session
      * management in Teneo engine</a>
      * 
      * @param headers the response headers.
@@ -360,7 +360,7 @@ public class TeneoEngineClient implements Serializable {
 
     /**
      * Adds some common values to the request builder. These values include the session identification
-     * support as per https://developers.artificial-solutions.com/engine/api#session-management
+     * support as per https://developers.teneo.ai/article/deploy/engine-api#session-management
      * 
      * @param builder the request builder
      * @param gatewaySessionValues the gateway session values to add
