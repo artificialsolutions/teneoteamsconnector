@@ -1,5 +1,9 @@
 # Teneo Microsoft Teams Connector
 
+> [!IMPORTANT]
+> This project has been retired and archived  
+> If there is a need of continued use / development of this project for your own needs please feel free to fork the project - which will remain here in archived form.
+
 This Java Connector connects Microsoft Teams to a Teneo-built Virtual Assistant (VA) so the Teams messenger acts as a frontend to the Teneo engine (the VA backend). This way, users can chat via Teams with a Teneo engine instead of a real person. One instance of this connector can serve multiple users talking to one published Teneo engine simultaneously.
 
 ## Description of the software
